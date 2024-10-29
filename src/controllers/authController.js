@@ -115,6 +115,10 @@ const authController = {
       res.json({ token });
   }),
 
+  exchangeJWTToUser: expressAsyncHandler(async (req, res) => {
+    return res.json(req.user)
+  }),
+
 };
 
 module.exports = authController
