@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const dbName = process.env.DB_NAME
+const containerMongo = 'mongodb'
 // Test editing
 // MongoDB connection URI
-const mongoURI = `mongodb://localhost:27018`;
+const mongoURI = `mongodb://${containerMongo}:27017`;
 
 async function dbConnect() {
     mongoose.connection.on('connected', () => {
