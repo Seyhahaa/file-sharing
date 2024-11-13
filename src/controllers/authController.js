@@ -1,5 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
-const userModel = require("../models/userModel");
+const userModel = require("../models/authModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { default: axios } = require("axios");
@@ -81,7 +81,7 @@ const authController = {
       await newUser.save();
     }
     
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+    const token = jwt.sign({ data: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
     res.json({ token });
   }),
 

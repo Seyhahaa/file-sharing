@@ -1,14 +1,17 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-    firstname: {type: String, required: true},
-    lastname:{type: String},
-    username: {type: String, required: true, unique: true},  //concatenation of firstname and lastname for username
+const UserSchema = mongoose.Schema({
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String, required: true, },
+    address: { type: String, required: true },
+    path: { type: String, default: "" },
+    company: { type: String,},
+    position: { type: String,},
+    date_of_birth: { type: Date },
+    gender: { type: String, required: true },
     password: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
-    role: {type: String, required: true, default: 'user'},
-    createdAt: {type: Date, default: Date.now}
-})
-const userModel = mongoose.model('Users', userSchema)
+},{ timestamps: true });
 
-module.exports = userModel
+module.exports = mongoose.model("users", UserSchema);

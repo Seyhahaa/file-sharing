@@ -1,5 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
-const userModel = require("../models/userModel");
+const userModel = require("../models/authModel");
 const jwt = require("jsonwebtoken");
 
 const handleError = (err, req, res, next) => {
