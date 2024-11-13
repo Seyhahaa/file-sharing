@@ -8,21 +8,16 @@ const userController = {
       firstname,
       lastname,
       password,
-      confirmPassword,
       phone,
       email,
-      
       company,
       position,
       gender,
       date_of_birth,
       address,
     } = req.body;
-    const {location}= req.file;
+    //const {location}= req.file;
 
-    if (password !== confirmPassword) {
-      throw new Error("Passwords missmatch");
-    }
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = new userModel({
@@ -33,12 +28,12 @@ const userController = {
       phone,
       email,
       address,
-      path: location,
       company,
       position,
       date_of_birth,
     });
     const createdUser = await user.save();
+    delete user.password
     return res.status(201).json({
       message: "User registered successfully",
       user: createdUser,
