@@ -18,7 +18,9 @@ const signUpSchema = checkSchema({
         errorMessage: 'Phone number should be numeric',
     },
     gender: {
-        isIn: [['male', 'female', 'other']],
+        isIn: {
+            options: ['male', 'female', 'other'],
+        },
         errorMessage: 'Invalid gender'
     },
     password: {

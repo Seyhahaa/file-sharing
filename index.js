@@ -4,7 +4,7 @@ const dbConnect = require('./src/db/db');
 const { authRouter } = require('./src/routes/authRoute');
 const { handleError, verifyJWT } = require('./src/middleware');
 const bodyParser = require('body-parser');
-const fileRouter = require('./src/routes/eventRoute');
+const eventRouter = require('./src/routes/eventRoute');
 const jwtStrategy = require('./src/strategy/jwt');
 const passport = require('passport');
 const userRouter = require('./src/routes/userRoute');
@@ -23,7 +23,7 @@ app.use(bodyParser.json())
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
-app.use('/event',verifyJWT, fileRouter);
+app.use('/event',verifyJWT, eventRouter);
 
 
 app.use(handleError)

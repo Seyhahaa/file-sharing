@@ -1,13 +1,14 @@
 const express = require('express');
-const fileController = require('../controllers/fileController');
-const uploadS3 = require('../middleware/uploadS3');
+const eventController = require('../controllers/eventController');
+const {uploadS3,multipleUploads, upload, uploadPartner} = require('../middleware/uploadS3');
 
-const fileRouter = express.Router()
-
-
-fileRouter.post('/upload', uploadS3, fileController.handleS3Upload)
-fileRouter.get('/getfile', fileController.getAllfileS3)
+const eventRouter = express.Router()
 
 
+eventRouter.post('/upload' ,upload ,eventController.uploadEvent)
+eventRouter.post('/partner/:id',uploadPartner ,eventController.uploadPartner)
+eventRouter.get('/all-events',eventController.getAllEvents)
 
-module.exports = fileRouter
+
+
+module.exports = eventRouter
