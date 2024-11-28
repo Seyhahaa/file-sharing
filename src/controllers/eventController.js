@@ -15,17 +15,22 @@ const eventController = {
       }),
       uploadEvent: async (req, res) => {
         const user = req.user;
-        const location  = req.files;
-        console.log(location)
         const {title, address, date, description} = req.body;
         const event = new eventModel({
           title,
           address,
           date,
           description,
-          images: location,
           uploadBy: user._id,
         });
+        if(req.files){
+          let path = ""
+          req.files.forEach(function(files, index, arr){
+            path = path + files.location + ','
+          })
+          path = path.substring(0, path.lastIndexOf(','))
+          event.images = path
+        }
         const newEvent = await event.save();
         return res.json({msg: 'event saved successfully', event: newEvent}).status(201);
       },
