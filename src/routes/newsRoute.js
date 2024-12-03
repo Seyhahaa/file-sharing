@@ -6,10 +6,10 @@ const newsController = require('../controllers/newsController');
 const newsRouter = express.Router()
 
 
-newsRouter.post('/',uploadS3 ,newsController.uploadNews);
-// userRouter.post('/signin',userController.signIn)
+ newsRouter.post('/',uploadS3 ,newsController.uploadNews);
  newsRouter.get('/all-news',newsController.getAllNews)
-// userRouter.put('/update-user/:id',uploadS3 ,userController.updateUser)
+ newsRouter.put('/update/:id',uploadS3 , newsController.updateNews)
+ newsRouter.delete('/delete/:id',newsController.deleteNews);
 
 
 module.exports = newsRouter

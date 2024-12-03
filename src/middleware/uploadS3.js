@@ -1,8 +1,9 @@
 // middlewares/uploadS3.js
 const multer = require('multer')
 const multerS3 = require('multer-s3')
-const { S3Client } = require('@aws-sdk/client-s3')
+const { S3Client,PutObjectCommand } = require('@aws-sdk/client-s3')
 const { v4: uuidv4 } = require('uuid');
+const eventModel = require('../models/eventModel');
 
 // Configure AWS SDK
 const s3 = new S3Client({
@@ -28,7 +29,7 @@ const uploadS3 = multer({
   }),
 }).single('file')
 
-const upload = multer({
+const handleUpload = multer({
   storage: multerS3({
     s3: s3,
     bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -71,4 +72,4 @@ const uploadPartner = multer({
 // }
 
 
-module.exports = {uploadS3, upload,uploadPartner}
+module.exports = {uploadS3, handleUpload,uploadPartner}

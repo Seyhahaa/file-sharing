@@ -89,6 +89,10 @@ const userController = {
       return res.status(404).json({ message: "User not found" });
     }
     return res.json(user);
+  }),
+  logout: expressAsyncHandler(async (req, res) => {
+    res.clearCookie("token");
+    return res.json({ message: "User logged out" });
   })
 };
 

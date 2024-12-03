@@ -5,6 +5,7 @@ const newsSchema = new mongoose.Schema({
     subTitle: {type: String, required: true},
     content:{type: String, required:true},
     image: { type: String},
+    key: {type: String},
     uploadBy: {type: mongoose.Types.ObjectId, ref: 'Users',required: true},
 },{ timestamps: true });
 const newsModel = mongoose.model('news', newsSchema)
