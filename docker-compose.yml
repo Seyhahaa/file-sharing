@@ -10,6 +10,19 @@ services:
       - ./src:/app/src
       - ./index.js:/app/index.js
       - .env:/app/.env
+  redis:
+    image: redis:5
+    container_name: event-redis
+    ports:
+      - 6379:6379
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:event-redis:6379
+    ports:
+      - "8082:8081"
+    depends_on:
+      - redis
   mongodb:
     build:
       context: .
