@@ -6,10 +6,11 @@ const { handleValidation } = require('../middleware');
 const userRouter = express.Router()
 
 
-userRouter.post('/signup',uploadS3 ,userController.signUp)
 userRouter.post('/signin',userController.signIn)
-userRouter.get('/all-users',userController.getAllUsers)
+userRouter.post('/signup', userController.signUp)
 userRouter.put('/update-user/:id',uploadS3 ,userController.updateUser)
+userRouter.delete('/delete-user/:id',userController.deleteUser)
+//userRouter.get('/all-users',userController.getAllUsers)
 
 
 module.exports = userRouter

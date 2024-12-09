@@ -1,5 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
-const userModel = require("../models/authModel");
+const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const { responseHandler } = require("express-intercept");
@@ -23,8 +23,8 @@ const verifyJWT = expressAsyncHandler(async (req, res, next) => {
   }
   const extract = token.split(" ")[1];
   const decoded = jwt.verify(extract, process.env.JWT_SECRET);
-  const user = await userModel.findById(decoded.data);
-  //console.log(user)
+  const user = await userModel.findById(decoded.id);
+  //console.log(decoded)
   req.user = user;
   next();
 });

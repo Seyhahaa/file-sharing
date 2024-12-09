@@ -14,10 +14,10 @@ const userController = {
       organization,
       position,
       gender,
-      date_of_birth,
+      dob,
       address,
     } = req.body;
-    const {location}= req.file;
+    //const {location}= req.file;
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = new userModel({
@@ -28,10 +28,10 @@ const userController = {
       phone,
       email,
       address,
-      path: location,
+      //path: location,
       organization,
       position,
-      date_of_birth,
+      dob,
     });
     const createdUser = await user.save();
     delete user.password
@@ -71,7 +71,7 @@ const userController = {
       dob,
       address,
     } = req.body;
-    const { location } = req.file;
+    //const { location } = req.file;
     const { id } = req.params;
     const user = await userModel.findByIdAndUpdate(id, {
       firstname,
@@ -79,7 +79,7 @@ const userController = {
       gender,
       phone,
       email,
-      path: location,
+      //path: location,
       organization,
       position,
       dob,
@@ -93,6 +93,14 @@ const userController = {
   logout: expressAsyncHandler(async (req, res) => {
     res.clearCookie("token");
     return res.json({ message: "User logged out" });
+  }),
+  deleteUser: expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const user = await userModel.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.json({ message: "User deleted successfully" });
   })
 };
 

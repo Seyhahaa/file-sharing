@@ -17,16 +17,16 @@ const eventController = {
       uploadEvent: async (req, res) => {
         const user = req.user;
         const {title, address,category, date, description} = req.body;
-        const key = req.files[0].key;
-        //console.log(key)
+        //const key = req.files[0].key;
+        //console.log(user)
         const event = new eventModel({
           title,
           address,
           category,
           date,
-          key: key,
+          //key: key,
           description,
-          uploadBy: user._id,
+          uploadBy: user.id,
         });
         if(req.files){
           let path = ""
@@ -46,7 +46,7 @@ const eventController = {
       updateEvent: asyncHandler(async (req, res) => {
         const {title, address, date, description} = req.body;
         const eventId = req.params.id;
-        const key = req.files[0].key;
+        //const key = req.files[0].key;
         
         const event = await eventModel.findByIdAndUpdate(eventId, {title, address, date, description, key}, {new: true});
         if(req.files){

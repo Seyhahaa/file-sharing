@@ -21,6 +21,7 @@ const uploadS3 = multer({
     bucket: process.env.AWS_S3_BUCKET_NAME,
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname })
+      console.log(file)
     },
     key: function (req, file, cb) {
         cb(null, uuidv4())

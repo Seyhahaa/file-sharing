@@ -7,7 +7,7 @@ const eventSchema = new mongoose.Schema({
     date: {type: Date, required: true},
     description:{type: String, required:true},
     images: { type: String},
-    key: {type: String, required: true},
+    key: {type: String},
     uploadBy: {type: mongoose.Types.ObjectId, ref: 'Users',required: true},
 },{ timestamps: true });
 const eventModel = mongoose.model('events', eventSchema)

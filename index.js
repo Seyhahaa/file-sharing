@@ -12,8 +12,12 @@ const newsRouter = require('./src/routes/newsRoute');
 const { default: rateLimit } = require('express-rate-limit');
 const { default: Redis } = require('ioredis');
 const client = require('./src/redis');
+const  cors  = require('cors');
+const setupSwagger = require('./src/swagger');
 
 const app = express();
+
+app.use(cors())
 
 
 //rate limit login
@@ -42,6 +46,7 @@ app.use('/news',verifyJWT,cacheMiddleware,cacheInterceptor(30*60),invalidateInte
 
 
 app.use(handleError)
+setupSwagger(app)
 
 app.listen(process.env.PORT, (req, res)=>{
     console.log(`Server is running at port ${process.env.PORT}`);
