@@ -5,7 +5,7 @@
 
 module.exports = {
     login: {
-        201: {
+        200: {
             message: {
                 type: 'Successfully logged in'
             }
@@ -17,7 +17,7 @@ module.exports = {
         }
     },
     signup: {
-        201: {
+        200: {
             message: {
                 type: 'Successfully Signed Up'
             }
@@ -29,7 +29,7 @@ module.exports = {
         }
     },
     editUser: {
-        201: {
+        200: {
             message: {
                 type: 'Updated Successfully'
             }
@@ -41,9 +41,33 @@ module.exports = {
         }
     },
     deleteUser: {
-        201: {
+        200: {
             message: {
                 type: 'Successfully deleted user'
+            }
+        },
+        500: {
+            internal: {
+                type: 'Internal server error!'
+            }
+        }
+    },
+    getEvent: {
+        200: {
+            message: {
+                type: "All User's Event"
+            }
+        },
+        500: {
+            internal: {
+                type: 'Internal server error!'
+            }
+        }
+    },
+    getEvent: {
+        200: {
+            message: {
+                type: "User's info"
             }
         },
         500: {

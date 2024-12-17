@@ -3,29 +3,29 @@ const userModel = require("../models/authModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { default: axios } = require("axios");
+const authModel = require("../models/authModel");
 
 const authController = {
   register: expressAsyncHandler(async (req, res) => {
     const { firstname, lastname, password, email, role, confirmPassword } =
       req.body;
-
-    if (password !== confirmPassword) {
+    if (password != confirmPassword) {
       throw new Error("Passwords missmatch");
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const username = firstname.concat(" ", lastname);
 
-    const user = new userModel({
-      firstname: firstname,
-      lastname: lastname,
+    const user = new authModel({
+      firstname,
+      lastname,
       username: username,
       password: hashPassword,
-      email: email,
-      role: role,
+      email,
+      role,
     });
     const createdUser = await user.save();
     return res.status(201).json({
-      message: "User registered successfully",
+      message: "Admin registered successfully",
       user: createdUser,
     });
   }),

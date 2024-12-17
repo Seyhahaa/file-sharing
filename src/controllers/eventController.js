@@ -37,16 +37,24 @@ const eventController = {
           event.images = path
         }
         const newEvent = await event.save();
-        return res.json({msg: 'event saved successfully', event: newEvent}).status(201);
+        return res.status(201).json({msg: 'event saved successfully', event: newEvent}).status(201);
       },
       getAllEvents: asyncHandler(async (req, res) => {
         const files = await fileModel.find({}).populate('uploadBy');
         return res.json(files);
       }),
+      getEventById: asyncHandler(async (req, res) => {
+        const eventId = req.params.id;
+        const event = await eventModel.findById(eventId).populate('uploadBy');
+        if (!event) {
+          return res.status(404).json({ message: "Event not found" });
+        }
+        return res.json(event);
+      }),
       updateEvent: asyncHandler(async (req, res) => {
         const {title, address, date, description} = req.body;
         const eventId = req.params.id;
-        //const key = req.files[0].key;
+        const key = req.files[0].key;
         
         const event = await eventModel.findByIdAndUpdate(eventId, {title, address, date, description, key}, {new: true});
         if(req.files){
@@ -61,7 +69,7 @@ const eventController = {
           return res.status(404).json({ message: "Event not found" });
         }
         await event.save();
-        return res.json({ msg: "Event updated successfully", event: event });
+        return res.status(200).json({ msg: "Event updated successfully", event: event });
       }),
       getAllEvents: asyncHandler(async (req, res) => {
         const events = await eventModel.find({}).populate('uploadBy');

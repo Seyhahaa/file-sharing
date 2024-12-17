@@ -2,6 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const eventModel = require("../models/eventModel");
 
 const userController = {
   signUp: expressAsyncHandler(async (req, res) => {
@@ -17,7 +18,7 @@ const userController = {
       dob,
       address,
     } = req.body;
-    //const {location}= req.file;
+    const {location}= req.file;
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = new userModel({
@@ -28,7 +29,7 @@ const userController = {
       phone,
       email,
       address,
-      //path: location,
+      path: location,
       organization,
       position,
       dob,
@@ -53,7 +54,7 @@ const userController = {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-    return res.json({ token });
+    return res.status(200).json({ token });
   }),
   getAllUsers: expressAsyncHandler(async (req, res) => {
     const users = await userModel.find({});
@@ -71,7 +72,7 @@ const userController = {
       dob,
       address,
     } = req.body;
-    //const { location } = req.file;
+    const { location } = req.file;
     const { id } = req.params;
     const user = await userModel.findByIdAndUpdate(id, {
       firstname,
@@ -101,7 +102,17 @@ const userController = {
       return res.status(404).json({ message: "User not found" });
     }
     return res.json({ message: "User deleted successfully" });
-  })
+  }),
+  exchangeJWTToUser: expressAsyncHandler(async (req, res) => {
+    console.log(req.user)
+    return res.json(req.user);
+  }),
+  getAllEventByUser: expressAsyncHandler(async (req, res) => {
+    const user = req.user
+   console.log(user.id)
+    const events = await eventModel.find({ uploadBy: user.id });
+    res.status(200).json(events);
+  }),
 };
 
 module.exports = userController;

@@ -11,15 +11,15 @@ const s3Client= new S3Client({
 const newsController = {
   uploadNews: expressAsyncHandler(async (req, res) => {
     const user = req.user;
-    const { location,key } = req.file
+    //const { location,key } = req.file
 
     const { title, subTitle,content,  } = req.body;
     const news = new newsModel({
         title,
         subTitle,
         content,
-        key:key,
-        image: location,
+        //key:key,
+        //image: location,
         uploadBy: user._id,
     })
     const newBlog = await news.save()
@@ -31,9 +31,9 @@ const newsController = {
   }),
   updateNews: expressAsyncHandler(async (req, res) => {
     const id = req.params.id;
-    const {location} = req.file
+    //const {location} = req.file
     const { title, subTitle, content, image } = req.body;
-    const news = await newsModel.findByIdAndUpdate(id, { title, subTitle, content, image:location }, { new: true });
+    const news = await newsModel.findByIdAndUpdate(id, { title, subTitle, content }, { new: true });
     
     if (!news) {
       return res.status(404).json({ message: "Event not found" });

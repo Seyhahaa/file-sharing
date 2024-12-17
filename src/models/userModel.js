@@ -9,9 +9,11 @@ const userSchema = mongoose.Schema({
     path: { type: String, default: "" },
     organization: { type: String,},
     position: { type: String,},
+    role: {type: String, default: 'user'},
     dob: { type: Date },
     gender: { type: String, required: true },
     password: {type: String, required: true},
+
 },{ timestamps: true });
 const userModel = mongoose.model('Users', userSchema)
 

@@ -10,6 +10,6 @@ const eventSchema = new mongoose.Schema({
     key: {type: String},
     uploadBy: {type: mongoose.Types.ObjectId, ref: 'Users',required: true},
 },{ timestamps: true });
-const eventModel = mongoose.model('events', eventSchema)
+const eventModel = mongoose.model('Events', eventSchema)
 
 module.exports = eventModel

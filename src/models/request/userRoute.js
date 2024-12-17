@@ -61,4 +61,16 @@ module.exports = {
     group: "User", // Swagger tag for apis.
     description: "delete your user",
   },
+  4: {
+
+    model: "all-event", // Name of the model
+    group: "User", // Swagger tag for apis.
+    description: "Get all events post by user",
+  },
+  5: {
+    model: "get-user", // Name of the model
+    group: "User", // Swagger tag for apis.
+    description: "Get user info by token",
+  },
+
 };

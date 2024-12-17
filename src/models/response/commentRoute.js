@@ -1,9 +1,9 @@
 
 module.exports = {
-    upload: {
+    post: {
         201: {
             message: {
-                type: 'Event created',
+                type: 'comment posted',
             }
         },
         500: {
@@ -12,10 +12,10 @@ module.exports = {
             }
         }
     },
-    getAll: {
+    edit: {
         201: {
             message: {
-                type: 'All Events received',
+                type: 'comment posted',
             }
         },
         500: {
@@ -24,22 +24,10 @@ module.exports = {
             }
         }
     },
-    getEventById: {
-        201: {
-            message: {
-                type: 'All Events received',
-            }
-        },
-        500: {
-            internal: {
-                type: 'Internal server error!'
-            }
-        }
-    },
-    editEvent: {
+    get: {
         200: {
             message: {
-                type: 'Event updated successfully',
+                type: 'comment posted',
             }
         },
         500: {
@@ -48,5 +36,16 @@ module.exports = {
             }
         }
     },
-    
+    delete: {
+        201: {
+            message: {
+                type: 'comment posted',
+            }
+        },
+        500: {
+            internal: {
+                type: 'Internal server error!'
+            }
+        }
+    },
 }

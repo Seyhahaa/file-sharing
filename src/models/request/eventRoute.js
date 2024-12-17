@@ -23,6 +23,14 @@ module.exports = {
     path: {
           id: Joi.string().required(),
         },
+    model: "getEventById", // Name of the model
+    group: "Events", // Swagger tag for apis.
+    description: "get event by id",
+  },
+  3: {
+    path: {
+          id: Joi.string().required(),
+        },
     body: {
         title: Joi.string().required(),
         address: Joi.string().required(),
@@ -34,7 +42,7 @@ module.exports = {
     group: "Events", // Swagger tag for apis.
     description: "Edit your information",
   },
-  3: {
+  4: {
     path: {
           id: Joi.string().required(),
         },
@@ -42,4 +50,5 @@ module.exports = {
     group: "Events", // Swagger tag for apis.
     description: "delete your event",
   },
+ 
 };

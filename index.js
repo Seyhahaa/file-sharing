@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const dbConnect = require('./src/db/db');
-const { authRouter } = require('./src/routes/authRoute');
+const authRouter  = require('./src/routes/authRoute');
 const { handleError, verifyJWT, cacheMiddleware, cacheInterceptor, invalidateInterceptor } = require('./src/middleware');
 const bodyParser = require('body-parser');
 const eventRouter = require('./src/routes/eventRoute');
@@ -14,6 +14,7 @@ const { default: Redis } = require('ioredis');
 const client = require('./src/redis');
 const  cors  = require('cors');
 const setupSwagger = require('./src/swagger');
+const commentRoute = require('./src/routes/commentRoute');
 
 const app = express();
 
@@ -35,14 +36,15 @@ passport.use(jwtStrategy)
 app.use(bodyParser.json())
 
 
+app.use('/user', loginLimit, userRouter);
 app.use('/auth',loginLimit, authRouter);
-app.use('/user', loginLimit,userRouter);
-app.use('/event',verifyJWT, eventRouter);
+app.use('/event',verifyJWT,cacheMiddleware,cacheInterceptor(30*60),invalidateInterceptor , eventRouter);
 //redis
 // app.use(cacheMiddleware)
 // app.use(cacheInterceptor(30*60))
 // app.use(invalidateInterceptor)
 app.use('/news',verifyJWT,cacheMiddleware,cacheInterceptor(30*60),invalidateInterceptor ,newsRouter);
+app.use('/comments',verifyJWT, commentRoute)
 
 
 app.use(handleError)
