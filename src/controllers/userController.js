@@ -18,7 +18,7 @@ const userController = {
       dob,
       address,
     } = req.body;
-    const {location}= req.file;
+    //const {location}= req.file;
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = new userModel({
@@ -29,7 +29,7 @@ const userController = {
       phone,
       email,
       address,
-      path: location,
+     // path: location,
       organization,
       position,
       dob,
@@ -72,7 +72,7 @@ const userController = {
       dob,
       address,
     } = req.body;
-    const { location } = req.file;
+    //const { location } = req.file;
     const { id } = req.params;
     const user = await userModel.findByIdAndUpdate(id, {
       firstname,

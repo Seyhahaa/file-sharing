@@ -37,6 +37,7 @@ module.exports = {
         category: Joi.string().required(),
         date: Joi.string().required(),
         description: Joi.string().required(),
+        uploadBy: Joi.string(),
     },
     model: "edit-event", // Name of the model
     group: "Events", // Swagger tag for apis.

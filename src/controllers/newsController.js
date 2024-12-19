@@ -26,8 +26,10 @@ const newsController = {
     res.status(201).json(newBlog);
   }),
   getAllNews: expressAsyncHandler(async (req, res) => {
-    const news = await newsModel.find({}).populate('uploadBy');
-    res.json(news);
+    const user = req.user
+    console.log(user.id)
+    const news = await newsModel.find({uploadBy: user.id});
+    res.status(200).json(news);
   }),
   updateNews: expressAsyncHandler(async (req, res) => {
     const id = req.params.id;
@@ -47,11 +49,11 @@ const newsController = {
     if (!news) {
       return res.status(404).json({ message: "Event not found" });
     }
-    const params = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: news.key,
-    }
-    await s3Client.send(new DeleteObjectCommand(params));
+    // const params = {
+    //   Bucket: process.env.AWS_S3_BUCKET_NAME,
+    //   Key: news.key,
+    // }
+    // await s3Client.send(new DeleteObjectCommand(params));
     return res.json({ message: "Event deleted successfully", news: news });
   }),
 

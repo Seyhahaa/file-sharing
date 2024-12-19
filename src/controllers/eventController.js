@@ -4,6 +4,7 @@ const { S3Client,DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { events } = require("../models/partnerModel");
 const { uploadPartner } = require("../middleware/uploadS3");
 const partnerModel = require("../models/partnerModel");
+const { deleteModel } = require("mongoose");
 
 const s3Client= new S3Client({
   region: process.env.AWS_REGION,
@@ -26,7 +27,7 @@ const eventController = {
           date,
           //key: key,
           description,
-          uploadBy: user.id,
+          uploadBy: user._id,
         });
         if(req.files){
           let path = ""
@@ -54,9 +55,9 @@ const eventController = {
       updateEvent: asyncHandler(async (req, res) => {
         const {title, address, date, description} = req.body;
         const eventId = req.params.id;
-        const key = req.files[0].key;
+        //const key = req.files[0].key;
         
-        const event = await eventModel.findByIdAndUpdate(eventId, {title, address, date, description, key}, {new: true});
+        const event = await eventModel.findByIdAndUpdate(eventId, {title, address, date, description}, {new: true});
         if(req.files){
           let path = ""
           req.files.forEach(function(files, index, arr){
@@ -98,18 +99,19 @@ const eventController = {
         if (!event) {
           return res.status(404).json({ message: "Event not found" });
         }
+        return res.status(200).json({msg: 'event deleted', Event: event});
 
-        const imagesString = event.images;
-        const keys = extractS3Keys(imagesString);
-        console.log(keys);
-        keys.forEach((file, index) => {
-        const deleteParams = {
-          Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: file,
-        };
-        s3Client.send(new DeleteObjectCommand(deleteParams));
-      })
-        return res.json({ msg: "Event deleted successfully" });
+      //   const imagesString = event.images;
+      //   const keys = extractS3Keys(imagesString);
+      //   console.log(keys);
+      //   keys.forEach((file, index) => {
+      //   const deleteParams = {
+      //     Bucket: process.env.AWS_S3_BUCKET_NAME,
+      //     Key: file,
+      //   };
+      //   s3Client.send(new DeleteObjectCommand(deleteParams));
+      // })
+      //   return res.json({ msg: "Event deleted successfully" });
       })
 
 

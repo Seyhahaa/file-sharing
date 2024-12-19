@@ -17,3 +17,9 @@ docker compose build
 ```sh
 docker compose up -d
 ```
+
+## Read the documentation
+
+```sh
+localhost:5000/docs/
+```
