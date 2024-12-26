@@ -5,6 +5,8 @@ const { events } = require("../models/partnerModel");
 const { uploadPartner } = require("../middleware/uploadS3");
 const partnerModel = require("../models/partnerModel");
 const { deleteModel } = require("mongoose");
+const { PaginationParameters } = require("mongoose-paginate-v2");
+const speakerModel = require("../models/speakerModel");
 
 const s3Client= new S3Client({
   region: process.env.AWS_REGION,
@@ -40,10 +42,6 @@ const eventController = {
         const newEvent = await event.save();
         return res.status(201).json({msg: 'event saved successfully', event: newEvent}).status(201);
       },
-      getAllEvents: asyncHandler(async (req, res) => {
-        const files = await fileModel.find({}).populate('uploadBy');
-        return res.json(files);
-      }),
       getEventById: asyncHandler(async (req, res) => {
         const eventId = req.params.id;
         const event = await eventModel.findById(eventId).populate('uploadBy');
@@ -73,7 +71,12 @@ const eventController = {
         return res.status(200).json({ msg: "Event updated successfully", event: event });
       }),
       getAllEvents: asyncHandler(async (req, res) => {
-        const events = await eventModel.find({}).populate('uploadBy');
+        //const user = req.user
+        //const events = await eventModel.find({ uploadBy: user.id }).populate('uploadBy');
+
+        const options = new PaginationParameters(req).get()
+        const events = await eventModel.paginate(...options)
+      
         return res.json(events);
       }),
       uploadPartner: asyncHandler(async (req, res) => {
@@ -93,6 +96,17 @@ const eventController = {
         const newPartner = await partner.save()
         return res.json({msg: 'partner saved successfully', partner: newPartner}).status(201);
       }),
+
+      getPartnerByEventId: asyncHandler(async (req, res) => {
+        const eventId = req.params.id;
+        const partner = await partnerModel.find({ event: eventId });
+        if (!partner) {
+          return res.status(404).json({ message: "Partner not found" });
+        }
+        return res.status(200).json(partner);
+      }),
+
+
       deleteEvent: asyncHandler(async (req, res) => {
         const eventId = req.params.id;
         const event = await eventModel.findByIdAndDelete(eventId);
@@ -112,7 +126,30 @@ const eventController = {
       //   s3Client.send(new DeleteObjectCommand(deleteParams));
       // })
       //   return res.json({ msg: "Event deleted successfully" });
-      })
+      }),
+
+      addSpeaker: asyncHandler(async (req, res) => {
+        const { name, company, position } = req.body;
+        const {location} = req.file
+        const eventId = req.params.id;
+        const speaker = new speakerModel({
+          event: eventId,
+          name,
+          company,
+          position,
+          photo: location,
+        });
+        const newSpeaker = await speaker.save();
+        return res.status(201).json({ msg: "Speaker saved successfully", speaker: newSpeaker });
+      }),
+      getSpeakerByEventId: asyncHandler(async (req, res) => {
+        const eventId = req.params.id;
+        const speakers = await speakerModel.find({ event: eventId });
+        if (!speakers) {
+          return res.status(404).json({ message: "Speakers not found" });
+        }
+        return res.status(200).json(speakers);
+      }),
 
 
 

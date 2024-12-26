@@ -38,7 +38,7 @@ app.use(bodyParser.json())
 
 app.use('/user', loginLimit, userRouter);
 app.use('/auth',loginLimit, authRouter);
-app.use('/event',verifyJWT,cacheMiddleware,cacheInterceptor(30*60),invalidateInterceptor , eventRouter);
+app.use('/event',eventRouter);
 //redis
 // app.use(cacheMiddleware)
 // app.use(cacheInterceptor(30*60))

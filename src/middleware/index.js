@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const { responseHandler } = require("express-intercept");
 const client = require("../redis");
+const multer = require("multer");
+const path = require("path");
 
 const handleError = (err, req, res, next) => {
   return res.status(400).json(err.message);
@@ -74,6 +76,40 @@ const cacheMiddleware = expressAsyncHandler(async (req, res, next) => {
   next();
 });
 
+//file Upload
+const storage = multer.diskStorage({
+  destination: "./uploads",
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+const singleUpload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).single("file");
+
+// Check file type
+function checkFileType(file, cb) {
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif|pdf/
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype)
+
+  if (mimetype && extname) {
+      return cb(null, true)
+  } else {
+      cb(new Error('Error: Images Only!'), false)
+  }
+}
+
 module.exports = {
   handleError,
   verifyJWT,
@@ -81,4 +117,5 @@ module.exports = {
   cacheMiddleware,
   invalidateInterceptor,
   cacheInterceptor,
+  singleUpload,
 };

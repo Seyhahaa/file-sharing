@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const eventSchema = new mongoose.Schema({
     title: {type: String, required: true},
@@ -10,6 +11,16 @@ const eventSchema = new mongoose.Schema({
     key: {type: String},
     uploadBy: {type: mongoose.Types.ObjectId, ref: 'Users',required: true},
 },{ timestamps: true });
+
+eventSchema.plugin(mongoosePaginate);
+eventSchema.index(
+    {
+        category: 'text',
+        address: 'text',
+        title: 'text'
+    }
+)
+
 const eventModel = mongoose.model('Events', eventSchema)
 
 module.exports = eventModel
