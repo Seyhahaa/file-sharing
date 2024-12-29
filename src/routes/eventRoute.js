@@ -11,6 +11,7 @@ eventRouter.get('/all-events',eventController.getAllEvents)
 eventRouter.get('/:id',eventController.getEventById)
 eventRouter.put('/:id',handleUpload,eventController.updateEvent)
 eventRouter.delete('/delete/:id',eventController.deleteEvent)
+eventRouter.get('',eventController.getCategory)
 
 eventRouter.post('/partner/:id',uploadPartner ,eventController.uploadPartner)
 eventRouter.get('/partner/:id',eventController.getPartnerByEventId)

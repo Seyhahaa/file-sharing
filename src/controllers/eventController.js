@@ -71,13 +71,52 @@ const eventController = {
         return res.status(200).json({ msg: "Event updated successfully", event: event });
       }),
       getAllEvents: asyncHandler(async (req, res) => {
-        //const user = req.user
         //const events = await eventModel.find({ uploadBy: user.id }).populate('uploadBy');
-
-        const options = new PaginationParameters(req).get()
-        const events = await eventModel.paginate(...options)
+        const {limit} = req.query
+          const options = {
+            limit: limit ? limit : -1,
+            pagination: limit ? true : false,
+            populate: 'uploadBy'
+        }
+        //const options = new PaginationParameters(req).get();
+        const events = await eventModel.paginate({},options);
       
         return res.json(events);
+      }),
+      getCategory: asyncHandler(async (req, res) =>{
+        
+        const items = await eventModel.aggregate([
+          // Group by category and get the first document from each
+          {
+            $group: {
+              _id: "$category",
+              item: { $first: "$$ROOT" }
+            }
+          },
+          // Reshape the output to be more readable
+          {
+            $project: {
+              _id: 0,
+              category: "$_id",
+              title: "$item.title",
+              address: "$item.address",
+              date: "$item.date",
+              description: "$item.description",
+              uploadBy: "$item.uploadBy",
+              images: "$item.images",
+            }
+          },
+          // Sort by category name for consistent results
+          {
+            $sort: { category: 1 }
+          }
+        ]);
+    
+        res.json({
+          success: true,
+          count: items.length,
+          data: items
+        });
       }),
       uploadPartner: asyncHandler(async (req, res) => {
         const event = req.params.id

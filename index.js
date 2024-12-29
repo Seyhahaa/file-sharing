@@ -38,12 +38,12 @@ app.use(bodyParser.json())
 
 app.use('/user', loginLimit, userRouter);
 app.use('/auth',loginLimit, authRouter);
-app.use('/event',eventRouter);
+app.use('/event',cacheMiddleware,cacheInterceptor(30*60),invalidateInterceptor ,eventRouter);
 //redis
 // app.use(cacheMiddleware)
 // app.use(cacheInterceptor(30*60))
 // app.use(invalidateInterceptor)
-app.use('/news',verifyJWT,cacheMiddleware,cacheInterceptor(30*60),invalidateInterceptor ,newsRouter);
+app.use('/news',newsRouter);
 app.use('/comments',verifyJWT, commentRoute)
 
 

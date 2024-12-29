@@ -11,25 +11,39 @@ const s3Client= new S3Client({
 const newsController = {
   uploadNews: expressAsyncHandler(async (req, res) => {
     const user = req.user;
-    //const { location,key } = req.file
+    const { location,key } = req.file
 
     const { title, subTitle,content,  } = req.body;
     const news = new newsModel({
         title,
         subTitle,
         content,
-        //key:key,
-        //image: location,
+        key:key,
+        image: location,
         uploadBy: user._id,
     })
     const newBlog = await news.save()
     res.status(201).json(newBlog);
   }),
   getAllNews: expressAsyncHandler(async (req, res) => {
-    const user = req.user
-    console.log(user.id)
-    const news = await newsModel.find({uploadBy: user.id});
+    const {limit} = req.query
+          const options = {
+            limit: limit ? limit : -1,
+            pagination: limit ? true : false,
+            populate: 'uploadBy'
+        }
+    
+    const news = await newsModel.paginate({},options);
+    //const news = await newsModel.find({}).query(query).populate('uploadBy');
     res.status(200).json(news);
+  }),
+  getNewsById: expressAsyncHandler(async (req, res, next) => {
+    const id = req.params.id;
+    const news = await newsModel.findById(id).populate('uploadBy');
+    if (!news) {
+      return res.status(404).json({ message: "News not found" });
+    }
+    res.json(news);
   }),
   updateNews: expressAsyncHandler(async (req, res) => {
     const id = req.params.id;

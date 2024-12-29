@@ -1,0 +1,9 @@
+- name: Setup EC2 instance
+  hosts: ec2
+  become: yes
+  tasks:
+    - name: clone git repository
+      ansible.builtin.shell: |
+        pwd
+        whoami
+        git clone https://github.com/Seyhahaa/dev-ops.git

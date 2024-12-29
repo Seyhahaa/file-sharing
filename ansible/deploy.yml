@@ -1,0 +1,32 @@
+- name: Setup EC2 instance
+  hosts: ec2
+  become: yes
+  tasks:
+    - name: Install required package
+      apt:
+        name:
+          - wget
+          - curl
+          - git
+        state: present
+    - name: Install nodejs and npm
+      apt:
+        name:
+          - nodejs
+          - npm
+        state: present
+
+    - name: clone git repository
+      ansible.builtin.shell: |
+        pwd
+        whoami
+        git clone https://github.com/Seyhahaa/dev-ops.git
+
+    - name: Update APT package list
+      apt:
+        update_cache: yes
+    - name: install dependencies
+      ansible.builtin.shell: |
+        cd dev-ops
+        npm install pm2 -g
+        pm2 start index.js

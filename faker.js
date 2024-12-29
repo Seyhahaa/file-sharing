@@ -44,12 +44,12 @@ async function generate() {
         const event = new eventModel({
             title: faker.commerce.productDescription(),
             address: faker.location.streetAddress(),
-            category:faker.helpers.arrayElement(['seminar', 'workshops','exhibition']),
+            category:'conference',
             date: faker.date.soon(),
             description: faker.lorem.paragraphs(10),
             images: faker.image.urlLoremFlickr({ height: 720,width: 1080 }),
             key: faker.string.uuid(),
-            uploadBy: '675fa498748cc98ce81a1830',
+            uploadBy: '675fa2a0748cc98ce81a1820',
         })
         eventList.push(event.id)
         await event.save()
