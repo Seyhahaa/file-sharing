@@ -37,6 +37,17 @@ const newsController = {
     //const news = await newsModel.find({}).query(query).populate('uploadBy');
     res.status(200).json(news);
   }),
+  getNewsByUser: expressAsyncHandler(async (req, res) => {
+    const user = req.user;
+    const {limit} = req.query
+          const options = {
+            limit: limit ? limit : -1,
+            pagination: limit ? true : false,
+            populate: 'uploadBy'
+        }
+    const news = await newsModel.paginate({uploadBy: user.id},options);
+    res.status(200).json(news);
+  }),
   getNewsById: expressAsyncHandler(async (req, res, next) => {
     const id = req.params.id;
     const news = await newsModel.findById(id).populate('uploadBy');
@@ -47,9 +58,9 @@ const newsController = {
   }),
   updateNews: expressAsyncHandler(async (req, res) => {
     const id = req.params.id;
-    //const {location} = req.file
+    const location = req.file.location
     const { title, subTitle, content, image } = req.body;
-    const news = await newsModel.findByIdAndUpdate(id, { title, subTitle, content }, { new: true });
+    const news = await newsModel.findByIdAndUpdate(id, { title, subTitle, content, image: location }, { new: true });
     
     if (!news) {
       return res.status(404).json({ message: "Event not found" });

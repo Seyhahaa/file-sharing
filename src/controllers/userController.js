@@ -18,7 +18,7 @@ const userController = {
       dob,
       address,
     } = req.body;
-    //const {location}= req.file;
+    const {location}= req.file;
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = new userModel({
@@ -29,7 +29,7 @@ const userController = {
       phone,
       email,
       address,
-     // path: location,
+      path: location,
       organization,
       position,
       dob,
@@ -72,7 +72,7 @@ const userController = {
       dob,
       address,
     } = req.body;
-    //const { location } = req.file;
+    const { location } = req.file;
     const { id } = req.params;
     const user = await userModel.findByIdAndUpdate(id, {
       firstname,
@@ -80,7 +80,7 @@ const userController = {
       gender,
       phone,
       email,
-      //path: location,
+      path: location,
       organization,
       position,
       dob,
@@ -89,7 +89,7 @@ const userController = {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    return res.json(user);
+    return res.status(200).json(user);
   }),
   logout: expressAsyncHandler(async (req, res) => {
     res.clearCookie("token");
@@ -109,9 +109,16 @@ const userController = {
   }),
   getAllEventByUser: expressAsyncHandler(async (req, res) => {
     const user = req.user
-   console.log(user.id)
-    const events = await eventModel.find({ uploadBy: user.id });
-    res.status(200).json(events);
+   const {limit} = req.query
+    const options = {
+      limit: limit ? limit : -1,
+      pagination: limit ? true : false,
+      populate: 'uploadBy'
+  }
+  //const options = new PaginationParameters(req).get();
+  const events = await eventModel.paginate({uploadBy: user.id},options);
+
+  return res.json(events);
   }),
 };
 

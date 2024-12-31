@@ -4,9 +4,9 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const eventSchema = new mongoose.Schema({
     title: {type: String, required: true},
     address: {type: String, required: true},
-    category: {type: String, required: true},
-    phone: {type: String},
-    date: {type: Date, required: true},
+    category: {type: String},
+    startdate: {type: Date, required: true},
+    enddate: {type: Date},
     description:{type: String, required:true},
     images: { type: String},
     key: {type: String},

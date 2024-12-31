@@ -19,26 +19,31 @@ const eventController = {
     
       uploadEvent: async (req, res) => {
         const user = req.user;
-        const {title, address,category, date, description} = req.body;
-        //const key = req.files[0].key;
+        const {title, address,category, startdate, enddate, description} = req.body;
+        //const key = req.file.key;
+        const location = req.file.location
+
+        //console.log(req.file)
         //console.log(user)
         const event = new eventModel({
           title,
           address,
           category,
-          date,
-          //key: key,
+          startdate,
+          enddate,
+          images: location,
+        
           description,
           uploadBy: user._id,
         });
-        if(req.files){
-          let path = ""
-          req.files.forEach(function(files, index, arr){
-            path = path + files.location + ','
-          })
-          path = path.substring(0, path.lastIndexOf(','))
-          event.images = path
-        }
+        // if(req.files){
+        //   let path = ""
+        //   req.files.forEach(function(files, index, arr){
+        //     path = path + files.location + ','
+        //   })
+        //   path = path.substring(0, path.lastIndexOf(','))
+        //   event.images = path
+        // }
         const newEvent = await event.save();
         return res.status(201).json({msg: 'event saved successfully', event: newEvent}).status(201);
       },
@@ -51,19 +56,20 @@ const eventController = {
         return res.json(event);
       }),
       updateEvent: asyncHandler(async (req, res) => {
-        const {title, address, date, description} = req.body;
+        const {title, address, startdate, enddate, description} = req.body;
         const eventId = req.params.id;
         //const key = req.files[0].key;
+        const location = req.file.location
         
-        const event = await eventModel.findByIdAndUpdate(eventId, {title, address, date, description}, {new: true});
-        if(req.files){
-          let path = ""
-          req.files.forEach(function(files, index, arr){
-            path = path + files.location + ','
-          })
-          path = path.substring(0, path.lastIndexOf(','))
-          event.images = path
-        }
+        const event = await eventModel.findByIdAndUpdate(eventId, {title, address, startdate, enddate, description, images:location}, {new: true});
+        // if(req.files){
+        //   let path = ""
+        //   req.files.forEach(function(files, index, arr){
+        //     path = path + files.location + ','
+        //   })
+        //   path = path.substring(0, path.lastIndexOf(','))
+        //   event.images = path
+        // }
         if (!event) {
           return res.status(404).json({ message: "Event not found" });
         }
@@ -72,9 +78,10 @@ const eventController = {
       }),
       getAllEvents: asyncHandler(async (req, res) => {
         //const events = await eventModel.find({ uploadBy: user.id }).populate('uploadBy');
-        const {limit} = req.query
+        const {limit,sort} = req.query
           const options = {
             limit: limit ? limit : -1,
+            sort: sort ? sort : { startdate: -1 },
             pagination: limit ? true : false,
             populate: 'uploadBy'
         }
@@ -82,6 +89,13 @@ const eventController = {
         const events = await eventModel.paginate({},options);
       
         return res.json(events);
+      }),
+      getSearch: asyncHandler(async (req, res) => {
+        const {title, address, category} = req.query
+        const events = await eventModel.find({
+          $text: { $search: `${category} ${title} ${address}` }
+        }).populate('uploadBy');
+        return res.status(200).json(events);
       }),
       getCategory: asyncHandler(async (req, res) =>{
         
@@ -117,6 +131,11 @@ const eventController = {
           count: items.length,
           data: items
         });
+      }),
+      getEventByCategory: asyncHandler(async (req, res) => {
+        const category = req.params.id;
+        const events = await eventModel.find({ category }).populate('uploadBy');
+        return res.status(200).json({category: events});
       }),
       uploadPartner: asyncHandler(async (req, res) => {
         const event = req.params.id
