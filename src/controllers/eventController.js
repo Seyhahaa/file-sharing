@@ -135,7 +135,7 @@ const eventController = {
       getEventByCategory: asyncHandler(async (req, res) => {
         const category = req.params.id;
         const events = await eventModel.find({ category }).populate('uploadBy');
-        return res.status(200).json({category: events});
+        return res.status(200).json(events);
       }),
       uploadPartner: asyncHandler(async (req, res) => {
         const event = req.params.id

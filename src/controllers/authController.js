@@ -68,15 +68,17 @@ const authController = {
         Authorization: `Bearer ${access_token}`,
       },
     });
+    console.log(response.data);
     // Perform user registration or login based on userprofile
-    const user = await userModel.findOne({ email: response.data.email });
+    const user = await authModel.findOne({ email: response.data.email });
     if (!user) {
-      const newUser = new userModel({
+      const newUser = new authModel({
         username: response.data.name,
         firstname: response.data.given_name,
         lastname: response.data.family_name,
         email: response.data.email,
         password: access_token,
+        picture: response.data.picture
       });
       await newUser.save();
     }
@@ -113,6 +115,19 @@ const authController = {
       }
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
       res.json({ token });
+  }),
+
+  verifyJWT: expressAsyncHandler(async (req, res, next) => {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ message: "Authentication failed" });
+    }
+    const extract = token.split(" ")[1];
+    const decoded = jwt.verify(extract, process.env.JWT_SECRET);
+    const user = await authModel.findById(decoded.data);
+    //console.log(user)
+    req.user = user;
+    next();
   }),
 
   exchangeJWTToUser: expressAsyncHandler(async (req, res) => {

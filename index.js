@@ -69,7 +69,7 @@ app.use('/event',eventRouter);
 // app.use(cacheInterceptor(30*60))
 // app.use(invalidateInterceptor)
 app.use('/news',newsRouter);
-app.use('/comments',verifyJWT, commentRoute)
+app.use('/comments', commentRoute)
 
 
 app.use(handleError)

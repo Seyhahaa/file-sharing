@@ -34,6 +34,10 @@ const userController = {
       position,
       dob,
     });
+    const result = await userModel.find({email: email});
+    if (result.length > 0) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
     const createdUser = await user.save();
     delete user.password
     return res.status(201).json({

@@ -6,9 +6,10 @@ const authSchema = new mongoose.Schema({
     username: {type: String, required: true, unique: true},  //concatenation of firstname and lastname for username
     password: {type: String, required: true},
     email: {type: String, required: true, unique: true},
-    role: {type: String, defaultValue: 'admin'},
+    role: {type: String, default: 'viewer'},
+    picture: {type: String},
     createdAt: {type: Date, default: Date.now},
 })
-const authModel = mongoose.model('auth', authSchema)
+const authModel = mongoose.model('Auth', authSchema)
 
 module.exports = authModel

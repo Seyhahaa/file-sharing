@@ -4,7 +4,8 @@ const commentModel = require("../models/commentModel");
 const commentController = {
     createComment: expressAsyncHandler(async (req, res, next) => {
         const eventId = req.params.eventId;
-        const userId = req.user._id; // assuming req.user is set with the logged-in user data
+        const userId = req.user._id;
+        console.log(eventId) // assuming req.user is set with the logged-in user data
         const { content } = req.body;
         const comment = new commentModel({
             content,
@@ -15,7 +16,7 @@ const commentController = {
         res.status(201).json({ message: 'Comment created successfully', comment: newComment})
     }),
     getAllComments: expressAsyncHandler(async (req, res) => {
-        const comments = await commentModel.find({ event: req.params.eventId }).populate('byUser').populate('event');
+        const comments = await commentModel.find({ event: req.params.eventId }).populate('byUser').sort('-createdAt');
         res.status(200).json(comments);
     }),
     editComment: expressAsyncHandler(async (req, res) => {
