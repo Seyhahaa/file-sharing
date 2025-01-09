@@ -6,14 +6,15 @@ const newsController = require('../controllers/newsController');
 const newsRouter = express.Router()
 
 
+newsRouter.post('/' ,verifyJWT, uploadS3,newsController.uploadNews);
+newsRouter.get('/all-news',newsController.getAllNews)
+newsRouter.put('/update/:id',verifyJWT ,uploadS3, newsController.updateNews)
+newsRouter.delete('/delete/:id',newsController.deleteNews);
+
 newsRouter.get('/user',verifyJWT,newsController.getNewsByUser)
 
-
- newsRouter.post('/' ,verifyJWT, uploadS3,newsController.uploadNews);
- newsRouter.get('/all-news',newsController.getAllNews)
  newsRouter.get('/:id',newsController.getNewsById)
- newsRouter.put('/update/:id',verifyJWT ,uploadS3, newsController.updateNews)
- newsRouter.delete('/delete/:id',verifyJWT,newsController.deleteNews);
+ newsRouter.put('/social/:id', newsController.addSocial)
 
 
 module.exports = newsRouter

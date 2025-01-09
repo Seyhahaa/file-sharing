@@ -81,6 +81,16 @@ const newsController = {
     // await s3Client.send(new DeleteObjectCommand(params));
     return res.json({ message: "Event deleted successfully", news: news });
   }),
+  addSocial: expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const { socialMedia } = req.body;
+    console.log(req.body);
+    const news = await newsModel.findByIdAndUpdate(id, { socialMedia }, { new: true });
+    if (!news) {
+      return res.status(404).json({ message: "News not found" });
+    }
+    return res.json({ msg: "Social media added successfully", news: news });
+  }),
 
 };
 

@@ -7,6 +7,7 @@ const newsSchema = new mongoose.Schema({
     subTitle: {type: String},
     content:{type: String, required:true},
     image: { type: String},
+    socialMedia: {type: Array },
     key: {type: String},
     uploadBy: {type: mongoose.Types.ObjectId, ref: 'Users',required: true},
 },{ timestamps: true });

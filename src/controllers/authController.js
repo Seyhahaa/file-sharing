@@ -7,7 +7,7 @@ const authModel = require("../models/authModel");
 
 const authController = {
   register: expressAsyncHandler(async (req, res) => {
-    const { firstname, lastname, password, email, role, confirmPassword } =
+    const { firstname, lastname, password, email, confirmPassword } =
       req.body;
     if (password != confirmPassword) {
       throw new Error("Passwords missmatch");
@@ -21,8 +21,12 @@ const authController = {
       username: username,
       password: hashPassword,
       email,
-      role,
+      role: 'admin',
     });
+    const admin = await authModel.find({ email: user.email });
+    if (admin.length > 0) {
+      return res.status(400).json({ message: "Admin already exists"})
+    }
     const createdUser = await user.save();
     return res.status(201).json({
       message: "Admin registered successfully",
@@ -32,7 +36,7 @@ const authController = {
 
   login: expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    const user = await userModel.findOne({ email: email });
+    const user = await authModel.findOne({ email: email });
     if (!user) {
       throw new Error("User not found");
     }
@@ -42,7 +46,7 @@ const authController = {
     }
     const token = jwt.sign({data:user._id}, process.env.JWT_SECRET,{expiresIn: '2h'})
     return res.status(200).json({ 
-      message:"User logged in successfully", 
+      message:"Admin logged in successfully", 
        token });
   }),
 

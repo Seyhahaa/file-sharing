@@ -21,7 +21,7 @@ const eventController = {
         const user = req.user;
         const {title, address,category, startdate, enddate, description} = req.body;
         //const key = req.file.key;
-        const location = req.file.location
+        const location = req?.file?.location
 
         //console.log(req.file)
         //console.log(user)

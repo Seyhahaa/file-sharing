@@ -49,7 +49,7 @@ const server = createServer(app, (req, res) => {
 //rate limit login
 const loginLimit = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minutes
-  max: 5, // Limit each IP to 100 requests per windowMs
+  max: 10, // Limit each IP to 100 requests per windowMs
   message: ({msg:'Too many requests from this IP, please try again later.'})
 })
 
