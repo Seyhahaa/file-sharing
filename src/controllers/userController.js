@@ -117,7 +117,8 @@ const userController = {
     const options = {
       limit: limit ? limit : -1,
       pagination: limit ? true : false,
-      populate: 'uploadBy'
+      populate: 'uploadBy',
+      sort: { startdate: -1}
   }
   //const options = new PaginationParameters(req).get();
   const events = await eventModel.paginate({uploadBy: user.id},options);

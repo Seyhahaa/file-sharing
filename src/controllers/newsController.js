@@ -11,14 +11,14 @@ const s3Client= new S3Client({
 const newsController = {
   uploadNews: expressAsyncHandler(async (req, res) => {
     const user = req.user;
-    const { location,key } = req.file
+    const location = req?.file?.location
 
     const { title, subTitle,content,  } = req.body;
     const news = new newsModel({
         title,
         subTitle,
         content,
-        key:key,
+        //key:key,
         image: location,
         uploadBy: user._id,
     })
@@ -43,7 +43,8 @@ const newsController = {
           const options = {
             limit: limit ? limit : -1,
             pagination: limit ? true : false,
-            populate: 'uploadBy'
+            populate: 'uploadBy',
+            sort : { createdAt: -1 },
         }
     const news = await newsModel.paginate({uploadBy: user.id},options);
     res.status(200).json(news);

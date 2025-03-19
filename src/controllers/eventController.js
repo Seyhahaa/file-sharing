@@ -59,7 +59,7 @@ const eventController = {
         const {title, address, startdate, enddate, description} = req.body;
         const eventId = req.params.id;
         //const key = req.files[0].key;
-        const location = req.file.location
+        const location = req?.file?.location
         
         const event = await eventModel.findByIdAndUpdate(eventId, {title, address, startdate, enddate, description, images:location}, {new: true});
         // if(req.files){
@@ -81,14 +81,14 @@ const eventController = {
         const {limit,sort} = req.query
           const options = {
             limit: limit ? limit : -1,
-            sort: sort ? sort : { startdate: -1 },
+            sort: { startdate: -1 },
             pagination: limit ? true : false,
             populate: 'uploadBy'
         }
         //const options = new PaginationParameters(req).get();
         const events = await eventModel.paginate({},options);
       
-        return res.json(events);
+        return res.status(200).json(events);
       }),
       getSearch: asyncHandler(async (req, res) => {
         const {title, address, category} = req.query
@@ -188,7 +188,7 @@ const eventController = {
 
       addSpeaker: asyncHandler(async (req, res) => {
         const { name, company, position } = req.body;
-        const {location} = req.file
+        const location = req?.file?.location
         const eventId = req.params.id;
         const speaker = new speakerModel({
           event: eventId,

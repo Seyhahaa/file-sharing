@@ -11,7 +11,7 @@ eventRouter.get('/:id',eventController.getEventById)
 eventRouter.put('/:id',verifyJWT,uploadS3,eventController.updateEvent)
 eventRouter.delete('/delete/:id',eventController.deleteEvent)
 
-eventRouter.get('/search-events',eventController.getSearch)
+eventRouter.get('/search/events',eventController.getSearch)
 eventRouter.get('',eventController.getCategory)
 eventRouter.get('/speaker/:id',eventController.getSpeakerByEventId)
 eventRouter.post('/partner/:id',uploadPartner ,eventController.uploadPartner)
