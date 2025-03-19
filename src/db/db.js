@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const dbName = process.env.DB_NAME
+const dbName = 'event-calendar'
 const containerMongo = 'mongodb'
 // Test editing
 // MongoDB connection URI
