@@ -53,16 +53,17 @@ const loginLimit = rateLimit({
   message: ({msg:'Too many requests from this IP, please try again later.'})
 })
 
-dbConnect().catch((err) => {
-    console.log(err.message)
-  })
+// dbConnect().catch((err) => {
+//     console.log(err.message)
+//   })
+require("./src/db");
 
 passport.use(jwtStrategy)
 app.use(bodyParser.json())
 
 
-app.use('/user', loginLimit, userRouter);
-app.use('/auth',loginLimit, authRouter);
+app.use('/user', userRouter);
+app.use('/auth', authRouter);
 app.use('/event',eventRouter);
 //redis
 // app.use(cacheMiddleware)
@@ -73,7 +74,7 @@ app.use('/comments', commentRoute)
 
 
 app.use(handleError)
-setupSwagger(app)
+// setupSwagger(app)
 
 server.listen(process.env.PORT, (req, res)=>{
     console.log(`Server is running at port ${process.env.PORT}`);
