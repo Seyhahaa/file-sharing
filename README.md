@@ -6,19 +6,37 @@
 cp .env.example .env
 ```
 
-## Build Project
+## (I).Build Project using docker
+#### Your computer must have docker 
 
 ```sh
 docker compose build
 ```
-
 ## Run Project
 
 ```sh
 docker compose up -d
 ```
 
-## Read the documentation
+
+## (II).Build Project using npm
+#### using node 22
+
+```sh
+npm install
+```
+
+```sh
+npm run dev
+```
+
+## Run Project
+
+```sh
+npm run start
+```
+
+## Read the api documentation
 
 ```sh
 localhost:5000/docs/

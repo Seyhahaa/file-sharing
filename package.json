@@ -6,7 +6,7 @@
   "scripts": {
     "generate": "node faker.js",
     "dev": "nodemon",
-    "start": "node",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
