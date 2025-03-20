@@ -5,6 +5,7 @@
 ```sh
 cp .env.example .env
 ```
+#### Fill the google api service and amazone service for store image
 
 ## (I).Build Project using docker
 #### Your computer must have docker 
